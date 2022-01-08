@@ -1,8 +1,9 @@
 package list
 
+import "github.com/HAo99/ds"
+
 type List[T any] interface {
-	Empty() bool
-	Len() int
+	ds.Container[T]
 
 	Front() (T, error)
 	Back() (T, error)

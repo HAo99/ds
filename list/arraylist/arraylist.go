@@ -7,39 +7,39 @@ import (
 )
 
 var (
-	_ list.List[struct{}]  = (*arrayList[struct{}])(nil)
-	_ list.ListX[struct{}] = (*arrayList[struct{}])(nil)
+	_ list.List[struct{}]  = (*ArrayList[struct{}])(nil)
+	_ list.ListX[struct{}] = (*ArrayList[struct{}])(nil)
 )
 
 var (
 	ErrIndexOutOfRange = errors.New("index out of range")
 )
 
-type arrayList[T any] struct {
+type ArrayList[T any] struct {
 	data []T
 	len  int
 }
 
-func New[T any]() *arrayList[T] {
-	return &arrayList[T]{
+func New[T any]() *ArrayList[T] {
+	return &ArrayList[T]{
 		data: make([]T, 0),
 		len:  0,
 	}
 }
 
-func (l *arrayList[T]) Cap() int {
+func (l *ArrayList[T]) Cap() int {
 	return len(l.data)
 }
 
-func (l *arrayList[T]) Len() int {
+func (l *ArrayList[T]) Len() int {
 	return l.len
 }
 
-func (l *arrayList[T]) Empty() bool {
+func (l *ArrayList[T]) Empty() bool {
 	return l.len == 0
 }
 
-func (l *arrayList[T]) Front() (T, error) {
+func (l *ArrayList[T]) Front() (T, error) {
 	if l.Empty() {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -47,7 +47,7 @@ func (l *arrayList[T]) Front() (T, error) {
 	return l.data[0], nil
 }
 
-func (l *arrayList[T]) FrontX() T {
+func (l *ArrayList[T]) FrontX() T {
 	r, err := l.Front()
 	if err != nil {
 		panic(err)
@@ -55,7 +55,7 @@ func (l *arrayList[T]) FrontX() T {
 	return r
 }
 
-func (l *arrayList[T]) Back() (T, error) {
+func (l *ArrayList[T]) Back() (T, error) {
 	if l.Empty() {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -63,7 +63,7 @@ func (l *arrayList[T]) Back() (T, error) {
 	return l.data[l.len-1], nil
 }
 
-func (l *arrayList[T]) BackX() T {
+func (l *ArrayList[T]) BackX() T {
 	r, err := l.Back()
 	if err != nil {
 		panic(err)
@@ -71,7 +71,7 @@ func (l *arrayList[T]) BackX() T {
 	return r
 }
 
-func (l *arrayList[T]) Get(index int) (T, error) {
+func (l *ArrayList[T]) Get(index int) (T, error) {
 	if index >= l.len || index < 0 {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -79,7 +79,7 @@ func (l *arrayList[T]) Get(index int) (T, error) {
 	return l.data[index], nil
 }
 
-func (l *arrayList[T]) GetX(index int) T {
+func (l *ArrayList[T]) GetX(index int) T {
 	r, err := l.Get(index)
 	if err != nil {
 		panic(err)
@@ -87,7 +87,7 @@ func (l *arrayList[T]) GetX(index int) T {
 	return r
 }
 
-func (l *arrayList[T]) Set(index int, x T) error {
+func (l *ArrayList[T]) Set(index int, x T) error {
 	if index >= l.len || index < 0 {
 		return ErrIndexOutOfRange
 	}
@@ -95,14 +95,14 @@ func (l *arrayList[T]) Set(index int, x T) error {
 	return nil
 }
 
-func (l *arrayList[T]) SetX(index int, x T) {
+func (l *ArrayList[T]) SetX(index int, x T) {
 	err := l.Set(index, x)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (l *arrayList[T]) Insert(index int, x T) error {
+func (l *ArrayList[T]) Insert(index int, x T) error {
 	if index > l.len || index < 0 {
 		return ErrIndexOutOfRange
 	}
@@ -117,14 +117,14 @@ func (l *arrayList[T]) Insert(index int, x T) error {
 	return nil
 }
 
-func (l *arrayList[T]) InsertX(index int, x T) {
+func (l *ArrayList[T]) InsertX(index int, x T) {
 	err := l.Insert(index, x)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (l *arrayList[T]) grow() {
+func (l *ArrayList[T]) grow() {
 	var newData []T
 	if len(l.data) == 0 {
 		newData = make([]T, 2)
@@ -137,15 +137,15 @@ func (l *arrayList[T]) grow() {
 	l.data = newData
 }
 
-func (l *arrayList[T]) PushBack(x T) {
+func (l *ArrayList[T]) PushBack(x T) {
 	l.Insert(l.len, x)
 }
 
-func (l *arrayList[T]) PushFront(x T) {
+func (l *ArrayList[T]) PushFront(x T) {
 	l.Insert(0, x)
 }
 
-func (l *arrayList[T]) Delete(index int) (T, error) {
+func (l *ArrayList[T]) Delete(index int) (T, error) {
 	if index >= l.len || index < 0 {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -158,7 +158,7 @@ func (l *arrayList[T]) Delete(index int) (T, error) {
 	return ret, nil
 }
 
-func (l *arrayList[T]) DeleteX(index int) T {
+func (l *ArrayList[T]) DeleteX(index int) T {
 	r, err := l.Delete(index)
 	if err != nil {
 		panic(err)
@@ -166,11 +166,11 @@ func (l *arrayList[T]) DeleteX(index int) T {
 	return r
 }
 
-func (l *arrayList[T]) PopFront() (T, error) {
+func (l *ArrayList[T]) PopFront() (T, error) {
 	return l.Delete(0)
 }
 
-func (l *arrayList[T]) PopFrontX() T {
+func (l *ArrayList[T]) PopFrontX() T {
 	r, err := l.PopFront()
 	if err != nil {
 		panic(err)
@@ -178,11 +178,11 @@ func (l *arrayList[T]) PopFrontX() T {
 	return r
 }
 
-func (l *arrayList[T]) PopBack() (T, error) {
+func (l *ArrayList[T]) PopBack() (T, error) {
 	return l.Delete(l.len - 1)
 }
 
-func (l *arrayList[T]) PopBackX() T {
+func (l *ArrayList[T]) PopBackX() T {
 	r, err := l.PopBack()
 	if err != nil {
 		panic(err)

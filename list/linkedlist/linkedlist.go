@@ -7,15 +7,15 @@ import (
 )
 
 var (
-	_ list.List[struct{}]  = (*linkedList[struct{}])(nil)
-	_ list.ListX[struct{}] = (*linkedList[struct{}])(nil)
+	_ list.List[struct{}]  = (*LinkedList[struct{}])(nil)
+	_ list.ListX[struct{}] = (*LinkedList[struct{}])(nil)
 )
 
 var (
 	ErrIndexOutOfRange = errors.New("index out of range")
 )
 
-type linkedList[T any] struct {
+type LinkedList[T any] struct {
 	root *node[T]
 	len  int
 }
@@ -26,25 +26,25 @@ type node[T any] struct {
 	prev *node[T]
 }
 
-func New[T any]() *linkedList[T] {
+func New[T any]() *LinkedList[T] {
 	root := &node[T]{}
 	root.next = root
 	root.prev = root
-	return &linkedList[T]{
+	return &LinkedList[T]{
 		root: root,
 		len:  0,
 	}
 }
 
-func (l *linkedList[T]) Len() int {
+func (l *LinkedList[T]) Len() int {
 	return l.len
 }
 
-func (l *linkedList[T]) Empty() bool {
+func (l *LinkedList[T]) Empty() bool {
 	return l.len == 0
 }
 
-func (l *linkedList[T]) Front() (T, error) {
+func (l *LinkedList[T]) Front() (T, error) {
 	if l.Empty() {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -52,7 +52,7 @@ func (l *linkedList[T]) Front() (T, error) {
 	return l.root.next.val, nil
 }
 
-func (l *linkedList[T]) FrontX() T {
+func (l *LinkedList[T]) FrontX() T {
 	r, err := l.Front()
 	if err != nil {
 		panic(err)
@@ -60,7 +60,7 @@ func (l *linkedList[T]) FrontX() T {
 	return r
 }
 
-func (l *linkedList[T]) Back() (T, error) {
+func (l *LinkedList[T]) Back() (T, error) {
 	if l.Empty() {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -68,7 +68,7 @@ func (l *linkedList[T]) Back() (T, error) {
 	return l.root.prev.val, nil
 }
 
-func (l *linkedList[T]) BackX() T {
+func (l *LinkedList[T]) BackX() T {
 	r, err := l.Back()
 	if err != nil {
 		panic(err)
@@ -76,7 +76,7 @@ func (l *linkedList[T]) BackX() T {
 	return r
 }
 
-func (l *linkedList[T]) Get(index int) (T, error) {
+func (l *LinkedList[T]) Get(index int) (T, error) {
 	if index >= l.len || index < 0 {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -88,7 +88,7 @@ func (l *linkedList[T]) Get(index int) (T, error) {
 	return cur.next.val, nil
 }
 
-func (l *linkedList[T]) GetX(index int) T {
+func (l *LinkedList[T]) GetX(index int) T {
 	r, err := l.Get(index)
 	if err != nil {
 		panic(err)
@@ -96,7 +96,7 @@ func (l *linkedList[T]) GetX(index int) T {
 	return r
 }
 
-func (l *linkedList[T]) Set(index int, x T) error {
+func (l *LinkedList[T]) Set(index int, x T) error {
 	if index >= l.len || index < 0 {
 		return ErrIndexOutOfRange
 	}
@@ -108,14 +108,14 @@ func (l *linkedList[T]) Set(index int, x T) error {
 	return nil
 }
 
-func (l *linkedList[T]) SetX(index int, x T) {
+func (l *LinkedList[T]) SetX(index int, x T) {
 	err := l.Set(index, x)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (l *linkedList[T]) Insert(index int, x T) error {
+func (l *LinkedList[T]) Insert(index int, x T) error {
 	if index > l.len || index < 0 {
 		return ErrIndexOutOfRange
 	}
@@ -135,14 +135,14 @@ func (l *linkedList[T]) Insert(index int, x T) error {
 	return nil
 }
 
-func (l *linkedList[T]) InsertX(index int, x T) {
+func (l *LinkedList[T]) InsertX(index int, x T) {
 	err := l.Insert(index, x)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (l *linkedList[T]) PushFront(x T) {
+func (l *LinkedList[T]) PushFront(x T) {
 	newNode := &node[T]{
 		val:  x,
 		next: l.root.next,
@@ -153,7 +153,7 @@ func (l *linkedList[T]) PushFront(x T) {
 	l.len++
 }
 
-func (l *linkedList[T]) PushBack(x T) {
+func (l *LinkedList[T]) PushBack(x T) {
 	newNode := &node[T]{
 		val:  x,
 		next: l.root,
@@ -164,7 +164,7 @@ func (l *linkedList[T]) PushBack(x T) {
 	l.len++
 }
 
-func (l *linkedList[T]) Delete(index int) (T, error) {
+func (l *LinkedList[T]) Delete(index int) (T, error) {
 	if index >= l.len || index < 0 {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -180,7 +180,7 @@ func (l *linkedList[T]) Delete(index int) (T, error) {
 	return ret, nil
 }
 
-func (l *linkedList[T]) DeleteX(index int) T {
+func (l *LinkedList[T]) DeleteX(index int) T {
 	r, err := l.Delete(index)
 	if err != nil {
 		panic(err)
@@ -188,7 +188,7 @@ func (l *linkedList[T]) DeleteX(index int) T {
 	return r
 }
 
-func (l *linkedList[T]) PopFront() (T, error) {
+func (l *LinkedList[T]) PopFront() (T, error) {
 	if l.Empty() {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -200,7 +200,7 @@ func (l *linkedList[T]) PopFront() (T, error) {
 	return ret, nil
 }
 
-func (l *linkedList[T]) PopFrontX() T {
+func (l *LinkedList[T]) PopFrontX() T {
 	r, err := l.PopFront()
 	if err != nil {
 		panic(err)
@@ -208,7 +208,7 @@ func (l *linkedList[T]) PopFrontX() T {
 	return r
 }
 
-func (l *linkedList[T]) PopBack() (T, error) {
+func (l *LinkedList[T]) PopBack() (T, error) {
 	if l.Empty() {
 		var zero T
 		return zero, ErrIndexOutOfRange
@@ -220,7 +220,7 @@ func (l *linkedList[T]) PopBack() (T, error) {
 	return ret, nil
 }
 
-func (l *linkedList[T]) PopBackX() T {
+func (l *LinkedList[T]) PopBackX() T {
 	r, err := l.PopBack()
 	if err != nil {
 		panic(err)
